@@ -1,5 +1,6 @@
 ---
 // NekoBeat Landing Page — generated from Stitch, polished and integrated into Astro
+const base = import.meta.env.BASE_URL;
 ---
 
 <html class="dark" lang="en">
@@ -33,11 +34,11 @@
 	<meta name="twitter:image" content="https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.png" />
 
 	<!-- Favicon & Icons -->
-	<link rel="icon" type="image/png" href="/screenshots/logo.png" />
-	<link rel="apple-touch-icon" href="/screenshots/logo.png" />
+	<link rel="icon" type="image/png" href={`${base}screenshots/logo.png`} />
+	<link rel="apple-touch-icon" href={`${base}screenshots/logo.png`} />
 
 	<!-- GEO: AI Discoverability -->
-	<link rel="llms" href="/llms.txt" type="text/plain" title="LLM Context" />
+	<link rel="llms" href={`${base}llms.txt`} type="text/plain" title="LLM Context" />
 
 	<!-- Preconnect for performance -->
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -435,7 +436,7 @@
 	<!-- Navigation -->
 	<nav class="glass-nav" style="position:fixed; top:16px; left:50%; transform:translateX(-50%); width:90%; max-width:80rem; border-radius:16px; display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; z-index:50;">
 		<a href="/" style="text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
-			<img src="/screenshots/logo.png" alt="NekoBeat" style="width:32px; height:32px; border-radius:8px;" />
+			<img src={`${base}screenshots/logo.png`} alt="NekoBeat" style="width:32px; height:32px; border-radius:8px;" />
 			<span class="font-headline" style="font-size:1.25rem; font-weight:800; color:#f1f5f9; letter-spacing:-0.025em;">
 				<span style="color:#e11d48;">Neko</span>Beat
 			</span>
@@ -491,7 +492,7 @@
 				<img
 					alt="NekoBeat desktop app — expanded player view with album art, synced lyrics, and playback controls"
 					style="width:100%; border-radius:12px; display:block;"
-					src="/screenshots/player_expanded.png"
+					src={`${base}screenshots/player_expanded.png`}
 				/>
 			</div>
 		</div>
@@ -588,23 +589,23 @@
 		<div class="reveal screenshot-carousel" style="padding:0 1.5rem;">
 			<div style="flex:0 0 1rem;"></div>
 			<div class="screenshot-item">
-				<img src="/screenshots/news.png" alt="NekoBeat Latest Releases view" loading="lazy" />
+				<img src={`${base}screenshots/news.png`} alt="NekoBeat Latest Releases view" loading="lazy" />
 				<div class="screenshot-label">Latest Releases <span>Trending tracks from Last.fm, displayed in a rich album grid</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src="/screenshots/player_expanded.png" alt="NekoBeat expanded player with synced lyrics" loading="lazy" />
+				<img src={`${base}screenshots/player_expanded.png`} alt="NekoBeat expanded player with synced lyrics" loading="lazy" />
 				<div class="screenshot-label">Expanded Player <span>Full-screen playback with album art and synchronized lyrics</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src="/screenshots/equalizer.png" alt="NekoBeat 10-Band DSP Equalizer" loading="lazy" />
+				<img src={`${base}screenshots/equalizer.png`} alt="NekoBeat 10-Band DSP Equalizer" loading="lazy" />
 				<div class="screenshot-label">10-Band Equalizer <span>GStreamer-powered DSP with genre presets from 31Hz to 16kHz</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src="/screenshots/search.png" alt="NekoBeat search and browse interface" loading="lazy" />
+				<img src={`${base}screenshots/search.png`} alt="NekoBeat search and browse interface" loading="lazy" />
 				<div class="screenshot-label">NekoBrowse <span>Search YouTube and SoundCloud from a unified portal</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src="/screenshots/liked.png" alt="NekoBeat liked songs library" loading="lazy" />
+				<img src={`${base}screenshots/liked.png`} alt="NekoBeat liked songs library" loading="lazy" />
 				<div class="screenshot-label">Liked Songs <span>Your personal library with offline caching and grid/list views</span></div>
 			</div>
 			<div style="flex:0 0 1rem;"></div>
@@ -644,7 +645,7 @@
 						<img
 							alt="NekoBeat 10-Band DSP Equalizer with Classical preset active"
 							style="width:100%; height:auto; display:block;"
-							src="/screenshots/equalizer.png"
+							src={`${base}screenshots/equalizer.png`}
 						/>
 						<!-- Performance card overlay -->
 						<div style="position:absolute; bottom:1.5rem; left:1.5rem; right:1.5rem; padding:1.25rem; background:rgba(53,52,58,0.7); backdrop-filter:blur(24px); border-radius:16px; border:1px solid rgba(255,255,255,0.1);">
@@ -681,7 +682,7 @@
 		<div style="max-width:80rem; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1.5rem;">
 			<div style="display:flex; flex-direction:column; gap:0.5rem;">
 				<div style="display:flex; align-items:center; gap:0.5rem;">
-					<img src="/screenshots/logo.png" alt="NekoBeat" style="width:24px; height:24px; border-radius:6px;" />
+					<img src={`${base}screenshots/logo.png`} alt="NekoBeat" style="width:24px; height:24px; border-radius:6px;" />
 					<span class="font-headline" style="font-size:1.125rem; font-weight:800; color:#e2e8f0;">
 						<span style="color:#e11d48;">Neko</span>Beat
 					</span>
