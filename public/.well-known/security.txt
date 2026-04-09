@@ -1,0 +1,3 @@
+Contact: https://github.com/nishal21/NekoBeat/issues
+Preferred-Languages: en
+Canonical: https://nishal21.github.io/NekoBeat-Website/.well-known/security.txt

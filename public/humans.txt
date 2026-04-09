@@ -1,0 +1,21 @@
+# NekoBeat
+# https://nekobeat.dev
+
+/* TEAM */
+Developer: Nishal
+Site: https://github.com/nishal21
+Location: Earth
+
+/* TECHNOLOGY */
+Framework: Astro
+Design System: Stitch MCP (NekoBeat Audiophile)
+Fonts: Plus Jakarta Sans, Manrope (Google Fonts)
+Icons: Material Symbols Outlined
+Colors: Rose (#E11D48), Cyan (#4CD7F6), Void Black (#131318)
+
+/* APP STACK */
+Core: Rust
+Framework: Tauri v2
+Frontend: React + TypeScript
+Audio: GStreamer
+Streams: yt-dlp

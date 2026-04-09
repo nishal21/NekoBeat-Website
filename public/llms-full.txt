@@ -1,0 +1,23 @@
+# NekoBeat — The Premium, Cross-Platform Music Aggregator
+
+## About
+NekoBeat is a free, open-source music aggregator built with Rust, Tauri v2, React, and GStreamer. It delivers audiophile-grade streaming with under 12ms playback latency and under 150MB memory usage. Available for Windows with macOS, Linux, and Android coming soon.
+
+## Features
+- Universal Aggregation: Search YouTube and SoundCloud from one interface
+- Offline Caching: Liked songs cached locally for zero-latency playback
+- 10-Band DSP Equalizer: GStreamer-powered with genre presets (31Hz–16kHz)
+- Smart Discovery: Live Last.fm scraping for trending tracks
+- Custom Lyrics: Upload .lrc/.srt/.vtt files with auto-conversion
+- Discord Rich Presence: Track info broadcast via Rust integration
+
+## Tech Stack
+Rust (core), Tauri v2 (framework), React + TypeScript (frontend), GStreamer (audio), yt-dlp (streams)
+
+## Links
+- Source: https://github.com/nishal21/NekoBeat
+- Releases: https://github.com/nishal21/NekoBeat/releases
+- Developer: Nishal (https://github.com/nishal21)
+
+## Optional
+- Full details: https://nishal21.github.io/NekoBeat-Website/llms.txt

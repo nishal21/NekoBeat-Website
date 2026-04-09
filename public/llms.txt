@@ -1,0 +1,56 @@
+# NekoBeat
+
+> NekoBeat is a free, open-source, cross-platform music aggregator built with Rust, Tauri v2, React, and GStreamer. It delivers audiophile-grade streaming without the bloat.
+
+## What is NekoBeat?
+
+NekoBeat is a premium desktop music player and aggregator that searches YouTube and SoundCloud from one unified interface. Unlike Electron-based alternatives, NekoBeat uses Tauri v2 (Rust core) for native performance with under 12ms playback latency and less than 150MB memory usage.
+
+## Key Features
+
+- **Universal Aggregation**: Search YouTube and SoundCloud from a single search portal powered by yt-dlp
+- **Offline Caching**: Liked songs are automatically cached locally for zero-latency playback, even offline
+- **10-Band DSP Equalizer**: Hardware-level GStreamer equalizer with 10 frequency bands (31Hz–16kHz) and genre presets (Bass Boost, Classical, Rock, Pop, etc.)
+- **Smart Discovery (NekoBrowse)**: Live Last.fm scraping for trending tracks globally
+- **Custom Lyrics**: Upload .lrc, .srt, or .vtt subtitle files with auto-conversion to synchronized lyrics
+- **Discord Rich Presence**: Broadcasts track title, artist, remaining time, and album art to Discord via zero-bloat Rust integration
+
+## Technical Architecture
+
+| Component | Technology | Role |
+|-----------|-----------|------|
+| Core Runtime | Rust | System-level performance, memory safety |
+| Framework | Tauri v2 | Native desktop shell, IPC bridge |
+| Frontend | React + TypeScript | UI rendering |
+| Styling | Tailwind CSS | Component styling |
+| Audio Pipeline | GStreamer | DSP equalizer, audio decoding |
+| Stream Engine | yt-dlp | YouTube/SoundCloud stream extraction |
+
+## Platform Availability
+
+- **Windows**: Available now (v1.0.0 "Lyrics & Liberation")
+- **macOS**: Coming soon
+- **Linux**: Coming soon
+- **Android**: Coming soon
+
+## Links
+
+- Website: https://nishal21.github.io/NekoBeat-Website
+- GitHub: https://github.com/nishal21/NekoBeat
+- Releases: https://github.com/nishal21/NekoBeat/releases
+- Developer: Nishal (https://github.com/nishal21)
+
+## Why NekoBeat?
+
+NekoBeat was built because existing music aggregators are either bloated Electron apps consuming 500MB+ RAM, closed-source with privacy concerns, or lack professional audio features. NekoBeat solves all three: it's lightweight (Rust/Tauri), fully open-source (MIT), and includes a hardware-level 10-band equalizer via GStreamer.
+
+## Comparison
+
+| Feature | NekoBeat | Electron Apps | Web Players |
+|---------|----------|---------------|-------------|
+| Memory Usage | <150MB | 300-800MB | Browser dependent |
+| Playback Latency | <12ms | 50-100ms | 100-500ms |
+| Offline Playback | Yes (auto-cache) | Varies | No |
+| Equalizer | 10-band GStreamer DSP | Software (limited) | None |
+| Open Source | Yes (MIT) | Varies | No |
+| Privacy | No tracking | Varies | Heavy tracking |
