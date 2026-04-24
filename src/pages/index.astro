@@ -10,7 +10,7 @@ const base = import.meta.env.BASE_URL + '/';
 
 	<!-- Primary SEO -->
 	<title>NekoBeat — The Premium, Cross-Platform Music Aggregator</title>
-	<meta name="description" content="NekoBeat is a free, open-source music aggregator built with Rust, Tauri v2, React, and GStreamer. Features 10-band DSP equalizer, offline caching, YouTube/SoundCloud search, synced lyrics, and Discord Rich Presence. Under 12ms latency, under 150MB memory." />
+	<meta name="description" content="NekoBeat is a free, open-source music aggregator built with Rust, Tauri v2, React, and GStreamer. Features YouTube/SoundCloud/Spotify search, 10-band DSP equalizer, YouTube video sync, PiP miniplayer, offline caching, synced lyrics, Discord Rich Presence, and Windows SMTC. Under 12ms latency and in under 150MB memory." />
 	<meta name="keywords" content="NekoBeat, music aggregator, Rust, Tauri, GStreamer, yt-dlp, equalizer, cross-platform, open source, desktop music player, offline music, DSP equalizer" />
 	<meta name="author" content="Nishal" />
 	<meta name="robots" content="index, follow" />
@@ -20,7 +20,7 @@ const base = import.meta.env.BASE_URL + '/';
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://nishal21.github.io/NekoBeat-Website/" />
 	<meta property="og:title" content="NekoBeat — The Premium, Cross-Platform Music Aggregator" />
-	<meta property="og:description" content="Free, open-source music aggregator built with Rust, Tauri v2, React, and GStreamer. Audiophile-grade streaming with 10-band DSP equalizer, offline caching, and under 12ms latency." />
+	<meta property="og:description" content="Free, open-source music aggregator built with Rust, Tauri v2, React, and GStreamer. YouTube/SoundCloud/Spotify search, 10-band EQ, YouTube video sync, PiP miniplayer, offline caching, and under 12ms latency." />
 	<meta property="og:image" content="https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.png" />
 	<meta property="og:image:width" content="1920" />
 	<meta property="og:image:height" content="1080" />
@@ -30,7 +30,7 @@ const base = import.meta.env.BASE_URL + '/';
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="NekoBeat — The Premium Music Aggregator" />
-	<meta name="twitter:description" content="Open-source music aggregator powered by Rust & GStreamer. 10-band equalizer, offline caching, synced lyrics." />
+	<meta name="twitter:description" content="Open-source music aggregator powered by Rust & GStreamer. YouTube/SoundCloud/Spotify search, 10-band EQ, PiP miniplayer, video sync, offline caching, synced lyrics." />
 	<meta name="twitter:image" content="https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.png" />
 
 	<!-- Favicon & Icons -->
@@ -61,8 +61,8 @@ const base = import.meta.env.BASE_URL + '/';
 			"price": "0",
 			"priceCurrency": "USD"
 		},
-		"softwareVersion": "1.0.0",
-		"releaseNotes": "Lyrics & Liberation — Custom lyrics support with .lrc/.srt/.vtt auto-conversion",
+		"softwareVersion": "0.2.0",
+		"releaseNotes": "Universal search (YouTube, SoundCloud, Spotify), PiP miniplayer, YouTube video sync, auto-updater",
 		"downloadUrl": "https://github.com/nishal21/NekoBeat/releases/latest",
 		"screenshot": "https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.png",
 		"author": {
@@ -80,12 +80,16 @@ const base = import.meta.env.BASE_URL + '/';
 			]
 		},
 		"featureList": [
-			"Universal music aggregation (YouTube, SoundCloud)",
+			"Universal music aggregation (YouTube, SoundCloud, Spotify)",
 			"10-band GStreamer DSP equalizer (31Hz–16kHz)",
 			"Offline caching for liked songs",
 			"Synchronized lyrics (.lrc, .srt, .vtt)",
+			"YouTube music video sync",
+			"Picture-in-Picture miniplayer",
 			"Discord Rich Presence",
 			"Smart discovery via Last.fm trending",
+			"Windows SMTC / Media Session integration",
+			"In-app auto-updater with signed releases",
 			"Under 12ms playback latency",
 			"Under 150MB memory usage"
 		],
@@ -371,11 +375,14 @@ const base = import.meta.env.BASE_URL + '/';
 			box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 			transition: transform 0.3s ease;
 			position: relative;
+			aspect-ratio: 16 / 9;
 		}
 		.screenshot-item:hover { transform: scale(1.02); }
 		.screenshot-item img {
 			width: 100%;
-			height: auto;
+			height: 100%;
+			object-fit: cover;
+			object-position: top center;
 			display: block;
 		}
 		.screenshot-label {
@@ -424,10 +431,111 @@ const base = import.meta.env.BASE_URL + '/';
 			.mobile-toggle { display: none !important; }
 		}
 
+		/* Lightbox modal */
+		.lightbox-overlay {
+			position: fixed;
+			inset: 0;
+			z-index: 200;
+			background: rgba(0, 0, 0, 0.85);
+			backdrop-filter: blur(24px);
+			-webkit-backdrop-filter: blur(24px);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 2rem;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s ease;
+		}
+		.lightbox-overlay.active {
+			opacity: 1;
+			pointer-events: auto;
+		}
+		.lightbox-content {
+			max-width: 90vw;
+			max-height: 75vh;
+			border-radius: 16px;
+			overflow: hidden;
+			box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+			border: 1px solid rgba(255,255,255,0.1);
+			transform: scale(0.9);
+			transition: transform 0.3s ease;
+		}
+		.lightbox-overlay.active .lightbox-content {
+			transform: scale(1);
+		}
+		.lightbox-content img {
+			width: 100%;
+			height: auto;
+			max-height: 75vh;
+			object-fit: contain;
+			display: block;
+		}
+		.lightbox-info {
+			margin-top: 1.25rem;
+			text-align: center;
+			max-width: 40rem;
+		}
+		.lightbox-info h3 {
+			font-size: 1.5rem;
+			font-weight: 800;
+			color: #f1f5f9;
+			margin-bottom: 0.5rem;
+		}
+		.lightbox-info p {
+			color: #94a3b8;
+			font-size: 1rem;
+			line-height: 1.6;
+		}
+		.lightbox-close {
+			position: absolute;
+			top: 1.5rem;
+			right: 1.5rem;
+			background: rgba(255,255,255,0.1);
+			border: 1px solid rgba(255,255,255,0.15);
+			color: #e4e1e9;
+			width: 3rem;
+			height: 3rem;
+			border-radius: 9999px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background 0.2s ease;
+			z-index: 210;
+		}
+		.lightbox-close:hover {
+			background: rgba(255,255,255,0.2);
+		}
+		.lightbox-nav {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			background: rgba(255,255,255,0.08);
+			border: 1px solid rgba(255,255,255,0.1);
+			color: #e4e1e9;
+			width: 3rem;
+			height: 3rem;
+			border-radius: 9999px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background 0.2s ease;
+			z-index: 210;
+		}
+		.lightbox-nav:hover { background: rgba(255,255,255,0.15); }
+		.lightbox-nav.prev { left: 1.5rem; }
+		.lightbox-nav.next { right: 1.5rem; }
+
+		.screenshot-item { cursor: pointer; }
+
 		@media (prefers-reduced-motion: reduce) {
 			.reveal { transition: none; opacity: 1; transform: none; }
 			.btn-primary:hover, .btn-ghost:hover, .feature-card:hover { transform: none; }
 			.screenshot-item:hover { transform: none; }
+			.lightbox-overlay, .lightbox-content { transition: none; }
 		}
 	</style>
 </head>
@@ -519,7 +627,7 @@ const base = import.meta.env.BASE_URL + '/';
 					</div>
 					<div>
 						<h3 class="font-headline" style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin-bottom:0.75rem;">Universal Aggregation</h3>
-						<p style="color:#94a3b8; font-size:0.875rem; line-height:1.7;">Search YouTube and SoundCloud from one unified, frictionless search portal powered by yt-dlp.</p>
+						<p style="color:#94a3b8; font-size:0.875rem; line-height:1.7;">Search YouTube, SoundCloud, and Spotify from one unified portal. Custom scraping engine with yt-dlp fallback for maximum reliability.</p>
 					</div>
 				</div>
 
@@ -572,6 +680,46 @@ const base = import.meta.env.BASE_URL + '/';
 						<p style="color:#94a3b8; font-size:0.875rem; line-height:1.7;">Zero-bloat Rust integration broadcasts track titles, artists, remaining time, and album art to Discord.</p>
 					</div>
 				</div>
+
+				<div class="feature-card reveal" style="padding:2rem; border-radius:16px; display:flex; flex-direction:column; gap:1.5rem; cursor:pointer;">
+					<div class="card-icon" style="width:3rem; height:3rem; border-radius:12px; background:rgba(225,29,72,0.15); display:flex; align-items:center; justify-content:center; color:var(--primary);">
+						<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">smart_display</span>
+					</div>
+					<div>
+						<h3 class="font-headline" style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin-bottom:0.75rem;">YouTube Video Sync</h3>
+						<p style="color:#94a3b8; font-size:0.875rem; line-height:1.7;">Music videos auto-play in an embedded window, synchronized with the audio stream. Toggle on or off per session.</p>
+					</div>
+				</div>
+
+				<div class="feature-card reveal" style="padding:2rem; border-radius:16px; display:flex; flex-direction:column; gap:1.5rem; cursor:pointer;">
+					<div class="card-icon" style="width:3rem; height:3rem; border-radius:12px; background:rgba(3,181,211,0.15); display:flex; align-items:center; justify-content:center; color:var(--secondary);">
+						<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">pip</span>
+					</div>
+					<div>
+						<h3 class="font-headline" style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin-bottom:0.75rem;">PiP Miniplayer</h3>
+						<p style="color:#94a3b8; font-size:0.875rem; line-height:1.7;">Compact always-on-top floating player with album art, track info, and playback controls. Drag anywhere on screen.</p>
+					</div>
+				</div>
+
+				<div class="feature-card reveal" style="padding:2rem; border-radius:16px; display:flex; flex-direction:column; gap:1.5rem; cursor:pointer;">
+					<div class="card-icon" style="width:3rem; height:3rem; border-radius:12px; background:rgba(225,29,72,0.15); display:flex; align-items:center; justify-content:center; color:var(--primary);">
+						<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">media_bluetooth_on</span>
+					</div>
+					<div>
+						<h3 class="font-headline" style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin-bottom:0.75rem;">Media Session / SMTC</h3>
+						<p style="color:#94a3b8; font-size:0.875rem; line-height:1.7;">Full Windows SMTC integration — play, pause, next, previous, and seek from the system media overlay.</p>
+					</div>
+				</div>
+
+				<div class="feature-card reveal" style="padding:2rem; border-radius:16px; display:flex; flex-direction:column; gap:1.5rem; cursor:pointer;">
+					<div class="card-icon" style="width:3rem; height:3rem; border-radius:12px; background:rgba(3,181,211,0.15); display:flex; align-items:center; justify-content:center; color:var(--secondary);">
+						<span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">system_update</span>
+					</div>
+					<div>
+						<h3 class="font-headline" style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin-bottom:0.75rem;">Auto-Updater</h3>
+						<p style="color:#94a3b8; font-size:0.875rem; line-height:1.7;">In-app update checking with one-click install. Signed releases via the Tauri updater plugin.</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -602,11 +750,31 @@ const base = import.meta.env.BASE_URL + '/';
 			</div>
 			<div class="screenshot-item">
 				<img src={`${base}screenshots/search.png`} alt="NekoBeat search and browse interface" loading="lazy" />
-				<div class="screenshot-label">NekoBrowse <span>Search YouTube and SoundCloud from a unified portal</span></div>
+				<div class="screenshot-label">NekoBrowse <span>Search YouTube, SoundCloud, and Spotify from a unified portal</span></div>
+			</div>
+			<div class="screenshot-item">
+				<img src={`${base}screenshots/search2.png`} alt="NekoBeat multi-source search results" loading="lazy" />
+				<div class="screenshot-label">Multi-Source Results <span>YouTube, SoundCloud, and Spotify results side by side</span></div>
+			</div>
+			<div class="screenshot-item">
+				<img src={`${base}screenshots/yt-play.png`} alt="NekoBeat YouTube video sync with lyrics" loading="lazy" />
+				<div class="screenshot-label">YouTube Video Sync <span>Music video embedded and synchronized with audio playback</span></div>
 			</div>
 			<div class="screenshot-item">
 				<img src={`${base}screenshots/liked.png`} alt="NekoBeat liked songs library" loading="lazy" />
 				<div class="screenshot-label">Liked Songs <span>Your personal library with offline caching and grid/list views</span></div>
+			</div>
+			<div class="screenshot-item">
+				<img src={`${base}screenshots/pip.png`} alt="NekoBeat Picture-in-Picture miniplayer" loading="lazy" />
+				<div class="screenshot-label">PiP Miniplayer <span>Compact always-on-top floating player with playback controls</span></div>
+			</div>
+			<div class="screenshot-item">
+				<img src={`${base}screenshots/smtp-windows.png`} alt="NekoBeat Windows SMTC media controls" loading="lazy" />
+				<div class="screenshot-label">Media Session <span>Windows SMTC overlay with track info and playback controls</span></div>
+			</div>
+			<div class="screenshot-item">
+				<img src={`${base}screenshots/discord2.png`} alt="NekoBeat Discord Rich Presence" loading="lazy" />
+				<div class="screenshot-label">Discord Presence <span>Track info, album art, and remaining time on your profile</span></div>
 			</div>
 			<div style="flex:0 0 1rem;"></div>
 		</div>
@@ -700,6 +868,26 @@ const base = import.meta.env.BASE_URL + '/';
 		</div>
 	</footer>
 
+	<!-- Lightbox Modal -->
+	<div class="lightbox-overlay" id="lightbox">
+		<button class="lightbox-close" id="lightboxClose" aria-label="Close">
+			<span class="material-symbols-outlined">close</span>
+		</button>
+		<button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous">
+			<span class="material-symbols-outlined">chevron_left</span>
+		</button>
+		<button class="lightbox-nav next" id="lightboxNext" aria-label="Next">
+			<span class="material-symbols-outlined">chevron_right</span>
+		</button>
+		<div class="lightbox-content">
+			<img id="lightboxImg" src="" alt="" />
+		</div>
+		<div class="lightbox-info">
+			<h3 class="font-headline" id="lightboxTitle"></h3>
+			<p id="lightboxDesc"></p>
+		</div>
+	</div>
+
 	<!-- Scroll reveal + mobile menu JS -->
 	<script>
 		// Scroll reveal
@@ -730,6 +918,62 @@ const base = import.meta.env.BASE_URL + '/';
 				});
 			});
 		}
+
+		// Lightbox
+		const lightbox = document.getElementById('lightbox');
+		const lightboxImg = document.getElementById('lightboxImg') as HTMLImageElement;
+		const lightboxTitle = document.getElementById('lightboxTitle');
+		const lightboxDesc = document.getElementById('lightboxDesc');
+		const lightboxClose = document.getElementById('lightboxClose');
+		const lightboxPrev = document.getElementById('lightboxPrev');
+		const lightboxNext = document.getElementById('lightboxNext');
+		const screenshotItems = Array.from(document.querySelectorAll('.screenshot-item'));
+		let currentLightboxIndex = 0;
+
+		function openLightbox(index: number) {
+			const item = screenshotItems[index];
+			if (!item) return;
+			const img = item.querySelector('img') as HTMLImageElement;
+			const label = item.querySelector('.screenshot-label');
+			const title = label?.childNodes[0]?.textContent?.trim() || '';
+			const desc = label?.querySelector('span')?.textContent?.trim() || '';
+			lightboxImg!.src = img.src;
+			lightboxImg!.alt = img.alt;
+			lightboxTitle!.textContent = title;
+			lightboxDesc!.textContent = desc;
+			currentLightboxIndex = index;
+			lightbox!.classList.add('active');
+			document.body.style.overflow = 'hidden';
+		}
+
+		function closeLightbox() {
+			lightbox!.classList.remove('active');
+			document.body.style.overflow = '';
+		}
+
+		function navigateLightbox(dir: number) {
+			let next = currentLightboxIndex + dir;
+			if (next < 0) next = screenshotItems.length - 1;
+			if (next >= screenshotItems.length) next = 0;
+			openLightbox(next);
+		}
+
+		screenshotItems.forEach((item, i) => {
+			item.addEventListener('click', () => openLightbox(i));
+		});
+
+		lightboxClose?.addEventListener('click', closeLightbox);
+		lightboxPrev?.addEventListener('click', () => navigateLightbox(-1));
+		lightboxNext?.addEventListener('click', () => navigateLightbox(1));
+		lightbox?.addEventListener('click', (e) => {
+			if (e.target === lightbox) closeLightbox();
+		});
+		document.addEventListener('keydown', (e) => {
+			if (!lightbox?.classList.contains('active')) return;
+			if (e.key === 'Escape') closeLightbox();
+			if (e.key === 'ArrowLeft') navigateLightbox(-1);
+			if (e.key === 'ArrowRight') navigateLightbox(1);
+		});
 
 		// Active nav link on scroll
 		const sections = document.querySelectorAll('section[id]');
