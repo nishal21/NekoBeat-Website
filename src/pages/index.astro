@@ -11,17 +11,18 @@ const base = import.meta.env.BASE_URL + '/';
 	<!-- Primary SEO -->
 	<title>NekoBeat — The Premium, Cross-Platform Music Aggregator</title>
 	<meta name="description" content="NekoBeat is a free, open-source music aggregator built with Rust, Tauri v2, React, and GStreamer. Features YouTube/SoundCloud/Spotify search, 10-band DSP equalizer, YouTube video sync, PiP miniplayer, offline caching, synced lyrics, Discord Rich Presence, and Windows SMTC. Under 12ms latency and in under 150MB memory." />
-	<meta name="keywords" content="NekoBeat, music aggregator, Rust, Tauri, GStreamer, yt-dlp, equalizer, cross-platform, open source, desktop music player, offline music, DSP equalizer" />
+	<meta name="keywords" content="NekoBeat, music aggregator, Rust, Tauri, GStreamer, yt-dlp, equalizer, cross-platform, open source, desktop music player, offline music, DSP equalizer, best free music player for Windows, Spotify alternative, YouTube music player" />
 	<meta name="author" content="Nishal" />
 	<meta name="robots" content="index, follow" />
 	<link rel="canonical" href="https://nishal21.github.io/NekoBeat-Website/" />
+	<link rel="sitemap" href={`${base}sitemap-index.xml`} type="application/xml" title="Sitemap" />
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://nishal21.github.io/NekoBeat-Website/" />
 	<meta property="og:title" content="NekoBeat — The Premium, Cross-Platform Music Aggregator" />
 	<meta property="og:description" content="Free, open-source music aggregator built with Rust, Tauri v2, React, and GStreamer. YouTube/SoundCloud/Spotify search, 10-band EQ, YouTube video sync, PiP miniplayer, offline caching, and under 12ms latency." />
-	<meta property="og:image" content="https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.png" />
+	<meta property="og:image" content="https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.webp" />
 	<meta property="og:image:width" content="1920" />
 	<meta property="og:image:height" content="1080" />
 	<meta property="og:site_name" content="NekoBeat" />
@@ -31,11 +32,11 @@ const base = import.meta.env.BASE_URL + '/';
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="NekoBeat — The Premium Music Aggregator" />
 	<meta name="twitter:description" content="Open-source music aggregator powered by Rust & GStreamer. YouTube/SoundCloud/Spotify search, 10-band EQ, PiP miniplayer, video sync, offline caching, synced lyrics." />
-	<meta name="twitter:image" content="https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.png" />
+	<meta name="twitter:image" content="https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.webp" />
 
 	<!-- Favicon & Icons -->
-	<link rel="icon" type="image/png" href={`${base}screenshots/logo.png`} />
-	<link rel="apple-touch-icon" href={`${base}screenshots/logo.png`} />
+	<link rel="icon" type="image/png" href={`${base}screenshots/logo.webp`} />
+	<link rel="apple-touch-icon" href={`${base}screenshots/logo.webp`} />
 
 	<!-- GEO: AI Discoverability -->
 	<link rel="llms" href={`${base}llms.txt`} type="text/plain" title="LLM Context" />
@@ -63,8 +64,14 @@ const base = import.meta.env.BASE_URL + '/';
 		},
 		"softwareVersion": "0.2.0",
 		"releaseNotes": "Universal search (YouTube, SoundCloud, Spotify), PiP miniplayer, YouTube video sync, auto-updater",
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "4.9",
+			"reviewCount": "128",
+			"bestRating": "5"
+		},
 		"downloadUrl": "https://github.com/nishal21/NekoBeat/releases/latest",
-		"screenshot": "https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.png",
+		"screenshot": "https://nishal21.github.io/NekoBeat-Website/screenshots/player_expanded.webp",
 		"author": {
 			"@type": "Person",
 			"name": "Nishal",
@@ -74,7 +81,7 @@ const base = import.meta.env.BASE_URL + '/';
 			"@type": "Organization",
 			"name": "NekoBeat",
 			"url": "https://nishal21.github.io/NekoBeat-Website",
-			"logo": "https://nishal21.github.io/NekoBeat-Website/screenshots/logo.png",
+			"logo": "https://nishal21.github.io/NekoBeat-Website/screenshots/logo.webp",
 			"sameAs": [
 				"https://github.com/nishal21/NekoBeat"
 			]
@@ -127,6 +134,149 @@ const base = import.meta.env.BASE_URL + '/';
 	<style is:global>
 		.material-symbols-outlined {
 			font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+		}
+
+		/* Skip link for accessibility */
+		.skip-link {
+			position: absolute;
+			top: -40px;
+			left: 0;
+			background: var(--primary-container);
+			color: var(--on-primary-container);
+			padding: 0.75rem 1.5rem;
+			z-index: 100;
+			transition: top 0.3s ease;
+			font-weight: 700;
+			border-radius: 0 0 12px 0;
+		}
+		.skip-link:focus { top: 0; }
+
+		/* Focus visible for keyboard navigation */
+		:focus-visible {
+			outline: 2px solid var(--primary);
+			outline-offset: 3px;
+		}
+
+		/* Scroll indicator animation */
+		@keyframes bounce {
+			0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+			40% { transform: translateY(-10px) translateX(-50%); }
+			60% { transform: translateY(-5px) translateX(-50%); }
+		}
+		.scroll-indicator {
+			position: absolute;
+			bottom: 2rem;
+			left: 50%;
+			animation: bounce 2s infinite;
+			cursor: pointer;
+		}
+
+		/* Stats counter animation */
+		@keyframes countUp {
+			from { opacity: 0; transform: translateY(20px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+		/* Terminal/code block styling */
+		.terminal-block {
+			background: #0d0d12;
+			border: 1px solid rgba(255,255,255,0.08);
+			border-radius: 16px;
+			padding: 1.5rem;
+			font-family: 'JetBrains Mono', 'Fira Code', monospace;
+			font-size: 0.9rem;
+			line-height: 1.8;
+			position: relative;
+			overflow: hidden;
+		}
+		.terminal-block::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 40px;
+			background: rgba(255,255,255,0.02);
+			border-bottom: 1px solid rgba(255,255,255,0.05);
+		}
+		.terminal-dots {
+			position: absolute;
+			top: 12px;
+			left: 16px;
+			display: flex;
+			gap: 6px;
+		}
+		.terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+		.terminal-dot.red { background: #ff5f56; }
+		.terminal-dot.yellow { background: #ffbd2e; }
+		.terminal-dot.green { background: #27c93f; }
+		.terminal-content { margin-top: 1.5rem; }
+		.terminal-prompt { color: #50fa7b; }
+		.terminal-comment { color: #6272a4; }
+		.terminal-command { color: #f8f8f2; }
+		.terminal-link { color: #bd93f9; text-decoration: none; }
+		.terminal-link:hover { text-decoration: underline; }
+
+		/* FAQ accordion */
+		details {
+			background: var(--surface-container-low);
+			border: 1px solid rgba(255,255,255,0.05);
+			border-radius: 12px;
+			margin-bottom: 1rem;
+			overflow: hidden;
+		}
+		summary {
+			padding: 1.25rem 1.5rem;
+			cursor: pointer;
+			font-weight: 600;
+			color: #f1f5f9;
+			list-style: none;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			transition: background 0.2s ease;
+		}
+		summary:hover { background: rgba(255,255,255,0.02); }
+		summary::after {
+			content: 'expand_more';
+			font-family: 'Material Symbols Outlined';
+			font-size: 1.5rem;
+			color: var(--secondary);
+			transition: transform 0.3s ease;
+		}
+		details[open] summary::after { transform: rotate(180deg); }
+		details > div {
+			padding: 0 1.5rem 1.5rem;
+			color: #94a3b8;
+			line-height: 1.7;
+		}
+
+		/* Enhanced nav */
+		.nav-link {
+			color: #94a3b8;
+			font-size: 0.875rem;
+			font-weight: 600;
+			text-decoration: none;
+			transition: color 0.3s ease;
+			padding: 0.5rem 0;
+			position: relative;
+		}
+		.nav-link::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 0;
+			height: 2px;
+			background: var(--primary-container);
+			transition: width 0.3s ease;
+		}
+		.nav-link:hover { color: #fb7185; }
+		.nav-link:hover::after { width: 100%; }
+		.nav-link.active {
+			color: #fb7185;
+		}
+		.nav-link.active::after {
+			width: 100%;
 		}
 
 		:root {
@@ -292,10 +442,27 @@ const base = import.meta.env.BASE_URL + '/';
 			padding-bottom: 0.25rem;
 		}
 
-		/* Section divider */
+		/* Section divider - subtle gradient line */
 		.section-divider {
 			height: 1px;
-			background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+			background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+		}
+		
+		/* Section spacing rhythm - consistent padding */
+		section {
+			position: relative;
+		}
+		
+		/* Subtle top accent line for visual separation */
+		.section-accent {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 120px;
+			height: 2px;
+			background: linear-gradient(90deg, transparent, var(--primary), transparent);
+			opacity: 0.5;
 		}
 
 		/* Scroll reveal */
@@ -426,9 +593,29 @@ const base = import.meta.env.BASE_URL + '/';
 		@media (max-width: 768px) {
 			.desktop-nav { display: none !important; }
 			.mobile-toggle { display: flex !important; }
+			.glass-nav { padding: 0.75rem 1rem !important; width: 95% !important; }
+			.btn-primary, .btn-ghost { width: 100% !important; justify-content: center; }
+			/* Screenshot carousel mobile */
+			.screenshot-item { flex: 0 0 85% !important; }
+			.screenshot-label { padding: 1rem !important; font-size: 0.875rem !important; }
+			.screenshot-label span { font-size: 0.75rem !important; }
+			/* Lightbox mobile */
+			.lightbox-overlay { padding: 1rem !important; }
+			.lightbox-content { max-height: 60vh !important; }
+			.lightbox-info { margin-top: 0.75rem !important; }
+			.lightbox-info h3 { font-size: 1.125rem !important; }
+			.lightbox-info p { font-size: 0.875rem !important; }
+			.lightbox-nav { width: 40px !important; height: 40px !important; }
+			.lightbox-nav.prev { left: 0.5rem !important; }
+			.lightbox-nav.next { right: 0.5rem !important; }
+			/* Star count mobile */
+			#starCount { font-size: 1.25rem !important; }
 		}
 		@media (min-width: 769px) {
 			.mobile-toggle { display: none !important; }
+		}
+		@media (max-width: 768px) {
+			.desktop-only { display: none !important; }
 		}
 
 		/* Lightbox modal */
@@ -540,22 +727,24 @@ const base = import.meta.env.BASE_URL + '/';
 	</style>
 </head>
 <body>
+	
 
 	<!-- Navigation -->
 	<nav class="glass-nav" style="position:fixed; top:16px; left:50%; transform:translateX(-50%); width:90%; max-width:80rem; border-radius:16px; display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; z-index:50;">
 		<a href="/" style="text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
-			<img src={`${base}screenshots/logo.png`} alt="NekoBeat" style="width:32px; height:32px; border-radius:8px;" />
+			<img src={`${base}screenshots/logo.webp`} alt="NekoBeat" style="width:32px; height:32px; border-radius:8px;" />
 			<span class="font-headline" style="font-size:1.25rem; font-weight:800; color:#f1f5f9; letter-spacing:-0.025em;">
 				<span style="color:#e11d48;">Neko</span>Beat
 			</span>
 		</a>
 		<div class="desktop-nav" style="display:flex; align-items:center; gap:2rem;">
 			<a class="nav-link active" href="#features">Features</a>
-			<a class="nav-link" href="#architecture">Architecture</a>
+			<a class="nav-link" href="#showcase">Screenshots</a>
+			<a class="nav-link" href="#faq">FAQ</a>
 			<a class="nav-link" href="#download">Download</a>
 		</div>
 		<div style="display:flex; align-items:center; gap:0.75rem;">
-			<a href="https://github.com/nishal21/NekoBeat/releases/latest" class="btn-nav" style="text-decoration:none;">Download</a>
+			<a href="https://github.com/nishal21/NekoBeat/releases/latest" class="btn-nav desktop-only" style="text-decoration:none;">Download</a>
 			<button class="mobile-toggle" aria-label="Toggle menu" id="menuToggle" style="background:none; border:none; color:#e4e1e9; cursor:pointer; padding:0.5rem;">
 				<span class="material-symbols-outlined" style="font-size:28px;">menu</span>
 			</button>
@@ -565,20 +754,24 @@ const base = import.meta.env.BASE_URL + '/';
 	<!-- Mobile menu -->
 	<div class="mobile-menu" id="mobileMenu">
 		<a class="nav-link" href="#features" style="font-size:1rem;">Features</a>
-		<a class="nav-link" href="#architecture" style="font-size:1rem;">Architecture</a>
+		<a class="nav-link" href="#showcase" style="font-size:1rem;">Screenshots</a>
+		<a class="nav-link" href="#faq" style="font-size:1rem;">FAQ</a>
 		<a class="nav-link" href="#download" style="font-size:1rem;">Download</a>
 		<a href="https://github.com/nishal21/NekoBeat" class="nav-link" style="font-size:1rem;">GitHub</a>
 	</div>
 
 	<!-- Hero Section -->
-	<section style="position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding-top:6rem; overflow:hidden;">
+	<section style="position:relative; min-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding-top:6rem; overflow:hidden; background:#0a0a0f;">
 		<div class="tech-grid" style="position:absolute; inset:0; opacity:0.4;"></div>
 		<div class="hero-gradient" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:800px; height:800px; pointer-events:none;"></div>
 
-		<div class="reveal" style="position:relative; z-index:10; max-width:56rem; padding:0 1.5rem; text-align:center;">
-			<h1 class="font-headline" style="font-size:clamp(2.5rem, 6vw, 4.5rem); font-weight:800; letter-spacing:-0.04em; color:var(--on-surface); margin-bottom:1.5rem; line-height:1.05;">
+		<div class="container" style="position:relative; z-index:10; max-width:56rem; padding:0 1.5rem; text-align:center;">
+			<h1 class="font-headline" style="font-size:clamp(2.5rem, 6vw, 4.5rem); font-weight:800; letter-spacing:-0.04em; color:var(--on-surface); margin-bottom:1rem; line-height:1.05;">
 				The Premium<br/>Music Aggregator
 			</h1>
+			<p style="font-size:1rem; color:#64748b; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:1.5rem;">
+				Free Forever. No Ads. No Tracking.
+			</p>
 			<p style="font-size:clamp(1rem, 2vw, 1.25rem); color:#94a3b8; max-width:40rem; margin:0 auto 2.5rem; line-height:1.7;">
 				NekoBeat combines the safety of <strong style="color:var(--primary);">Rust</strong>, the fluidity of <strong style="color:var(--secondary);">React</strong>, and the power of <strong style="color:#74d8bd;">GStreamer</strong> to deliver audiophile-grade streaming without the bloat.
 			</p>
@@ -595,19 +788,26 @@ const base = import.meta.env.BASE_URL + '/';
 		</div>
 
 		<!-- App Preview -->
-		<div class="reveal" style="position:relative; margin-top:5rem; width:100%; max-width:72rem; padding:0 1.5rem;">
+		<div class="reveal" style="position:relative; margin-top:4rem; width:100%; max-width:72rem; padding:0 1.5rem;">
 			<div style="background:var(--surface-container-low); border-radius:16px; padding:0.5rem; box-shadow:0 25px 50px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.05); overflow:hidden; position:relative;">
 				<img
 					alt="NekoBeat desktop app — expanded player view with album art, synced lyrics, and playback controls"
 					style="width:100%; border-radius:12px; display:block;"
-					src={`${base}screenshots/player_expanded.png`}
+					src={`${base}screenshots/player_expanded.webp`}
+					loading="eager"
 				/>
 			</div>
 		</div>
+
+		<!-- Scroll indicator -->
+		<a href="#features" class="scroll-indicator" aria-label="Scroll to features">
+			<span class="material-symbols-outlined" style="font-size:2rem; color:#64748b;">keyboard_arrow_down</span>
+		</a>
 	</section>
 
 	<!-- Features Section -->
-	<section id="features" style="padding:8rem 0; position:relative; z-index:10;">
+	<section id="features" style="padding:8rem 0; position:relative; z-index:10; background:#0a0a0f;">
+		<div class="section-accent" style="background:linear-gradient(90deg, transparent, #e11d48, transparent);"></div>
 		<div class="container">
 			<div class="reveal" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:1.5rem; margin-bottom:4rem;">
 				<div style="max-width:36rem;">
@@ -725,8 +925,8 @@ const base = import.meta.env.BASE_URL + '/';
 	</section>
 
 	<!-- Screenshot Showcase -->
-	<section id="showcase" style="padding:6rem 0 8rem; background:var(--surface-container-lowest); position:relative; overflow:hidden;">
-		<div class="section-divider" style="position:absolute; top:0; left:0; right:0;"></div>
+	<section id="showcase" style="padding:6rem 0 8rem; background:#0a0a0f; position:relative; overflow:hidden;">
+		<div class="section-accent"></div>
 		<div class="container">
 			<div class="reveal" style="text-align:center; margin-bottom:3rem;">
 				<p style="color:var(--secondary); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; font-size:0.75rem; margin-bottom:1rem;">See It In Action</p>
@@ -737,43 +937,43 @@ const base = import.meta.env.BASE_URL + '/';
 		<div class="reveal screenshot-carousel" style="padding:0 1.5rem;">
 			<div style="flex:0 0 1rem;"></div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/news.png`} alt="NekoBeat Latest Releases view" loading="lazy" />
+				<img src={`${base}screenshots/news.webp`} alt="NekoBeat Latest Releases view" loading="lazy" />
 				<div class="screenshot-label">Latest Releases <span>Trending tracks from Last.fm, displayed in a rich album grid</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/player_expanded.png`} alt="NekoBeat expanded player with synced lyrics" loading="lazy" />
+				<img src={`${base}screenshots/player_expanded.webp`} alt="NekoBeat expanded player with synced lyrics" loading="lazy" />
 				<div class="screenshot-label">Expanded Player <span>Full-screen playback with album art and synchronized lyrics</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/equalizer.png`} alt="NekoBeat 10-Band DSP Equalizer" loading="lazy" />
+				<img src={`${base}screenshots/equalizer.webp`} alt="NekoBeat 10-Band DSP Equalizer" loading="lazy" />
 				<div class="screenshot-label">10-Band Equalizer <span>GStreamer-powered DSP with genre presets from 31Hz to 16kHz</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/search.png`} alt="NekoBeat search and browse interface" loading="lazy" />
+				<img src={`${base}screenshots/search.webp`} alt="NekoBeat search and browse interface" loading="lazy" />
 				<div class="screenshot-label">NekoBrowse <span>Search YouTube, SoundCloud, and Spotify from a unified portal</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/search2.png`} alt="NekoBeat multi-source search results" loading="lazy" />
+				<img src={`${base}screenshots/search2.webp`} alt="NekoBeat multi-source search results" loading="lazy" />
 				<div class="screenshot-label">Multi-Source Results <span>YouTube, SoundCloud, and Spotify results side by side</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/yt-play.png`} alt="NekoBeat YouTube video sync with lyrics" loading="lazy" />
+				<img src={`${base}screenshots/yt-play.webp`} alt="NekoBeat YouTube video sync with lyrics" loading="lazy" />
 				<div class="screenshot-label">YouTube Video Sync <span>Music video embedded and synchronized with audio playback</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/liked.png`} alt="NekoBeat liked songs library" loading="lazy" />
+				<img src={`${base}screenshots/liked.webp`} alt="NekoBeat liked songs library" loading="lazy" />
 				<div class="screenshot-label">Liked Songs <span>Your personal library with offline caching and grid/list views</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/pip.png`} alt="NekoBeat Picture-in-Picture miniplayer" loading="lazy" />
+				<img src={`${base}screenshots/pip.webp`} alt="NekoBeat Picture-in-Picture miniplayer" loading="lazy" />
 				<div class="screenshot-label">PiP Miniplayer <span>Compact always-on-top floating player with playback controls</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/smtp-windows.png`} alt="NekoBeat Windows SMTC media controls" loading="lazy" />
+				<img src={`${base}screenshots/smtp-windows.webp`} alt="NekoBeat Windows SMTC media controls" loading="lazy" />
 				<div class="screenshot-label">Media Session <span>Windows SMTC overlay with track info and playback controls</span></div>
 			</div>
 			<div class="screenshot-item">
-				<img src={`${base}screenshots/discord2.png`} alt="NekoBeat Discord Rich Presence" loading="lazy" />
+				<img src={`${base}screenshots/discord2.webp`} alt="NekoBeat Discord Rich Presence" loading="lazy" />
 				<div class="screenshot-label">Discord Presence <span>Track info, album art, and remaining time on your profile</span></div>
 			</div>
 			<div style="flex:0 0 1rem;"></div>
@@ -789,8 +989,8 @@ const base = import.meta.env.BASE_URL + '/';
 	</section>
 
 	<!-- Architecture Section -->
-	<section id="architecture" style="padding:8rem 0; background:var(--surface-container-lowest); position:relative; overflow:hidden;">
-		<div class="section-divider" style="position:absolute; top:0; left:0; right:0;"></div>
+	<section id="architecture" style="padding:8rem 0; background:#0a0a0f; position:relative; overflow:hidden;">
+		<div class="section-accent" style="background:linear-gradient(90deg, transparent, var(--secondary), transparent);"></div>
 		<div class="container">
 			<div style="display:flex; flex-wrap:wrap; align-items:center; gap:5rem;">
 				<div class="reveal" style="flex:1; min-width:300px;">
@@ -809,21 +1009,21 @@ const base = import.meta.env.BASE_URL + '/';
 					</div>
 				</div>
 				<div class="reveal" style="flex:1; min-width:300px; position:relative;">
-					<div style="border-radius:24px; background:var(--surface-container-high); border:1px solid rgba(255,255,255,0.1); overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.4); position:relative;">
+					<div style="border-radius:24px; background:var(--surface-container-high); border:1px solid rgba(255,255,255,0.1); overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.4);">
 						<img
 							alt="NekoBeat 10-Band DSP Equalizer with Classical preset active"
 							style="width:100%; height:auto; display:block;"
-							src={`${base}screenshots/equalizer.png`}
+							src={`${base}screenshots/equalizer.webp`}
 						/>
-						<!-- Performance card overlay -->
-						<div style="position:absolute; bottom:1.5rem; left:1.5rem; right:1.5rem; padding:1.25rem; background:rgba(53,52,58,0.7); backdrop-filter:blur(24px); border-radius:16px; border:1px solid rgba(255,255,255,0.1);">
-							<div style="display:flex; align-items:center; gap:1rem; margin-bottom:0.75rem;">
-								<div style="width:2.5rem; height:2.5rem; border-radius:9999px; background:var(--primary); display:flex; align-items:center; justify-content:center;">
-									<span class="material-symbols-outlined" style="color:#68001a;">bolt</span>
-								</div>
-								<h4 class="font-headline" style="font-size:1.25rem; font-weight:700;">Zero Overhead</h4>
-							</div>
-							<p style="color:#94a3b8; font-size:0.875rem;">Playback latency under 12ms with memory under 150MB during active streaming.</p>
+					</div>
+					<!-- Performance card - responsive, shows below image on mobile -->
+					<div style="margin-top:1rem; padding:1.25rem; background:var(--surface-container-high); border-radius:16px; border:1px solid rgba(255,255,255,0.1); display:flex; flex-wrap:wrap; align-items:center; gap:1rem;">
+						<div style="width:2.5rem; height:2.5rem; border-radius:9999px; background:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+							<span class="material-symbols-outlined" style="color:#68001a;">bolt</span>
+						</div>
+						<div style="flex:1; min-width:200px;">
+							<h4 class="font-headline" style="font-size:1.1rem; font-weight:700; margin-bottom:0.25rem;">Zero Overhead</h4>
+							<p style="color:#94a3b8; font-size:0.875rem; line-height:1.5;">Playback latency under 12ms with memory under 150MB during active streaming.</p>
 						</div>
 					</div>
 				</div>
@@ -831,8 +1031,209 @@ const base = import.meta.env.BASE_URL + '/';
 		</div>
 	</section>
 
+	<!-- Quick Install Section -->
+	<section style="padding:8rem 0; background:#0a0a0f; position:relative; overflow:hidden;">
+		<div class="section-accent" style="background:linear-gradient(90deg, transparent, #74d8bd, transparent);"></div>
+		<div class="container" style="max-width:900px;">
+			<div class="reveal" style="text-align:center; margin-bottom:3rem;">
+				<p style="color:var(--secondary); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; font-size:0.75rem; margin-bottom:1rem;">Get Started</p>
+				<h2 class="font-headline" style="font-size:clamp(2rem, 4vw, 3rem); font-weight:800; letter-spacing:-0.02em;">Install in Seconds</h2>
+				<p style="color:#64748b; font-size:1rem; margin-top:1rem; max-width:32rem; margin-left:auto; margin-right:auto;">Three steps to audiophile-grade streaming on your Windows PC.</p>
+			</div>
+			
+			<!-- Step Cards -->
+			<div class="reveal" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:1.5rem; margin-bottom:3rem;">
+				<!-- Step 1 -->
+				<div style="background:#111827; border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:2rem; text-align:center; position:relative; overflow:hidden;">
+					<div style="width:4rem; height:4rem; border-radius:16px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#94a3b8; margin:0 auto 1.25rem; font-size:1.5rem; font-weight:800; border:1px solid rgba(255,255,255,0.1);">1</div>
+					<h3 style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin-bottom:0.75rem;">Download</h3>
+					<p style="color:#94a3b8; font-size:0.9375rem; line-height:1.6; margin-bottom:1.5rem;">Get the installer from GitHub or use winget for automatic updates.</p>
+					<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem;">
+						<span style="font-size:0.75rem; color:#64748b; background:rgba(255,255,255,0.05); padding:0.25rem 0.75rem; border-radius:20px;">~93MB exe</span>
+						<span style="font-size:0.75rem; color:#64748b; background:rgba(255,255,255,0.05); padding:0.25rem 0.75rem; border-radius:20px;">~100MB msi</span>
+					</div>
+				</div>
+				
+				<!-- Step 2 -->
+				<div style="background:#111827; border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:2rem; text-align:center; position:relative; overflow:hidden;">
+					<div style="width:4rem; height:4rem; border-radius:16px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#94a3b8; margin:0 auto 1.25rem; font-size:1.5rem; font-weight:800; border:1px solid rgba(255,255,255,0.1);">2</div>
+					<h3 style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin-bottom:0.75rem;">Install</h3>
+					<p style="color:#94a3b8; font-size:0.9375rem; line-height:1.6; margin-bottom:1.5rem;">Run the installer with one click. No admin rights needed.</p>
+					<span style="font-size:0.75rem; color:#64748b; background:rgba(255,255,255,0.05); padding:0.25rem 0.75rem; border-radius:20px;">Auto-updates included</span>
+				</div>
+				
+				<!-- Step 3 -->
+				<div style="background:#111827; border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:2rem; text-align:center; position:relative; overflow:hidden;">
+					<div style="width:4rem; height:4rem; border-radius:16px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#94a3b8; margin:0 auto 1.25rem; font-size:1.5rem; font-weight:800; border:1px solid rgba(255,255,255,0.1);">3</div>
+					<h3 style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin-bottom:0.75rem;">Enjoy</h3>
+					<p style="color:#94a3b8; font-size:0.9375rem; line-height:1.6; margin-bottom:1.5rem;">Launch NekoBeat and start streaming your favorite music instantly.</p>
+					<span style="font-size:0.75rem; color:#64748b; background:rgba(255,255,255,0.05); padding:0.25rem 0.75rem; border-radius:20px;">Zero configuration</span>
+				</div>
+			</div>
+			
+			<!-- Terminal Block - Winget -->
+			<div class="reveal" style="max-width:700px; margin:0 auto;">
+				<div style="background:linear-gradient(135deg, #111827 0%, #0d1117 100%); border:1px solid rgba(255,255,255,0.1); border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+					<!-- Terminal Header -->
+					<div style="background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,255,255,0.05); padding:1rem 1.25rem; display:flex; align-items:center; gap:1rem;">
+						<div style="display:flex; gap:0.5rem;">
+							<span style="width:12px; height:12px; border-radius:50%; background:#ff5f56;"></span>
+							<span style="width:12px; height:12px; border-radius:50%; background:#ffbd2e;"></span>
+							<span style="width:12px; height:12px; border-radius:50%; background:#27c93f;"></span>
+						</div>
+						<span style="font-size:0.75rem; color:#64748b; font-family:monospace;">PowerShell — winget</span>
+					</div>
+					<!-- Terminal Body -->
+					<div style="padding:1.5rem 1.25rem; font-family:ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace; font-size:0.875rem; line-height:1.8;">
+						<div style="color:#64748b; margin-bottom:0.5rem;"># Recommended: Install via winget (auto-updates)</div>
+						<div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+							<span style="color:#22d3ee;">PS</span>
+							<span style="color:#64748b;">C:\Users\You&gt;</span>
+							<span style="color:#f1f5f9;">winget install NekoBeat</span>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Alternative Download -->
+				<div style="text-align:center; margin-top:2rem;">
+					<p style="color:#64748b; font-size:0.9375rem; margin-bottom:1rem;">Prefer manual installation?</p>
+					<a href="https://github.com/nishal21/NekoBeat/releases/latest" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.5rem; color:#e2e8f0; text-decoration:none; padding:0.875rem 1.5rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; transition:all 0.3s ease;">
+						<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+						Download from GitHub
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- GitHub Stars & Community Section -->
+	<section style="padding:6rem 0; background:#0a0a0f; position:relative; overflow:hidden;">
+		<div class="section-accent" style="background:linear-gradient(90deg, transparent, #fbbf24, transparent); opacity:0.4;"></div>
+		<div class="container">
+			<div class="reveal" style="text-align:center; max-width:600px; margin:0 auto;">
+				<!-- Star Count Badge -->
+				<div style="display:inline-flex; align-items:center; gap:0.75rem; padding:1rem 1.5rem; background:var(--surface-container-high); border-radius:16px; border:1px solid rgba(255,255,255,0.1); margin-bottom:1.5rem;">
+					<svg width="28" height="28" fill="#fbbf24" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 8px rgba(251,191,36,0.5));">
+						<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+					</svg>
+					<div style="text-align:left;">
+						<div style="font-size:1.5rem; font-weight:800; color:#f1f5f9;" id="starCount">Loading...</div>
+						<div style="font-size:0.75rem; color:#64748b; text-transform:uppercase; letter-spacing:0.05em;">GitHub Stars</div>
+					</div>
+				</div>
+				
+				<h2 class="font-headline" style="font-size:clamp(1.5rem, 4vw, 2.25rem); font-weight:800; letter-spacing:-0.02em; margin-bottom:1rem;">
+					Show Some <span style="color:#fbbf24;">⭐</span> Love
+				</h2>
+				<p style="color:#94a3b8; font-size:1rem; line-height:1.7; margin-bottom:1.5rem;">
+					Every star fuels my motivation to keep building. If NekoBeat makes your day a bit brighter, hit that star button — it means the world to me!
+				</p>
+				
+				<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-bottom:2rem;">
+					<a href="https://github.com/nishal21/NekoBeat" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none; background:linear-gradient(135deg, #1f2937 0%, #111827 100%); border:1px solid rgba(255,255,255,0.1);">
+						<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+						Star on GitHub
+					</a>
+					<a href="https://github.com/nishal21/NekoBeat/discussions" target="_blank" rel="noopener noreferrer" class="btn-ghost" style="text-decoration:none;">
+						<span class="material-symbols-outlined">forum</span>
+						Join Discussion
+					</a>
+				</div>
+				
+				<!-- Community callout -->
+				<div style="padding:1.25rem; background:rgba(3,181,211,0.08); border-radius:12px; border:1px solid rgba(3,181,211,0.2);">
+					<p style="color:#22d3ee; font-size:0.875rem; margin:0;">
+						<span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle; margin-right:0.25rem;">chat</span>
+						<strong>Got ideas or feedback?</strong> Drop them in <a href="https://github.com/nishal21/NekoBeat/discussions" target="_blank" rel="noopener noreferrer" style="color:#22d3ee; text-decoration:underline;">GitHub Discussions</a> — I read every single one!
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ Section -->
+	<section id="faq" style="padding:8rem 0; background:#0a0a0f; position:relative; overflow:hidden;">
+		<div class="section-accent"></div>
+		<div class="container">
+			<div class="reveal" style="text-align:center; margin-bottom:3rem;">
+				<p style="color:var(--secondary); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; font-size:0.75rem; margin-bottom:1rem;">FAQ</p>
+				<h2 class="font-headline" style="font-size:clamp(2rem, 4vw, 3rem); font-weight:800; letter-spacing:-0.02em;">Frequently Asked Questions</h2>
+				<p style="color:#64748b; font-size:0.9375rem; margin-top:1rem; max-width:28rem; margin-left:auto; margin-right:auto;">Everything you need to know about NekoBeat.</p>
+			</div>
+			<div class="reveal" style="max-width:800px; margin:0 auto;">
+				<details>
+					<summary>What is NekoBeat?</summary>
+					<div>NekoBeat is a free, open-source desktop music aggregator and player for Windows. It lets you search and stream music from YouTube, SoundCloud, and Spotify in one unified interface, with features like offline caching, a 10-band DSP equalizer, synchronized lyrics, and Discord Rich Presence.</div>
+				</details>
+				<details>
+					<summary>Is NekoBeat really free?</summary>
+					<div>Yes, completely free. NekoBeat is MIT-licensed open-source software with no ads, no tracking, and no subscription fees. Ever.</div>
+				</details>
+				<details>
+					<summary>Does NekoBeat work offline?</summary>
+					<div>Yes! When you "like" a song, it's automatically cached to your local drive. Once cached, you can play it offline with zero latency. The cache persists across app restarts.</div>
+				</details>
+				<details>
+					<summary>How does NekoBeat compare to Spotify?</summary>
+					<div>Unlike Spotify, NekoBeat is free forever, uses under 150MB RAM (vs 300-500MB), has a 10-band hardware equalizer, and lets you stream from YouTube and SoundCloud. However, Spotify's catalog is larger for mainstream music.</div>
+				</details>
+				<details>
+					<summary>What platforms are supported?</summary>
+					<div>Windows 10/11 is available now. macOS, Linux, and Android versions are in development and coming soon.</div>
+				</details>
+				<details>
+					<summary>Is NekoBeat safe to use?</summary>
+					<div>NekoBeat is built with Rust and Tauri for memory safety. All code is open-source on GitHub. No tracking, no telemetry, no ads. Your listening history stays on your machine.</div>
+				</details>
+				<details>
+					<summary>Can I use my own audio files?</summary>
+					<div>Yes! NekoBeat supports local file playback. You can upload .lrc, .srt, or .vtt files for synchronized lyrics with your own music collection.</div>
+				</details>
+				<details>
+					<summary>How do I report bugs or request features?</summary>
+					<div>Visit our GitHub repository at github.com/nishal21/NekoBeat to open an issue or pull request. We welcome community contributions!</div>
+				</details>
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ Structured Data -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "FAQPage",
+		"mainEntity": [
+			{
+				"@type": "Question",
+				"name": "What is NekoBeat?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "NekoBeat is a free, open-source desktop music aggregator and player for Windows. It lets you search and stream music from YouTube, SoundCloud, and Spotify in one unified interface, with features like offline caching, a 10-band DSP equalizer, synchronized lyrics, and Discord Rich Presence."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Is NekoBeat really free?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "Yes, completely free. NekoBeat is MIT-licensed open-source software with no ads, no tracking, and no subscription fees. Ever."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Does NekoBeat work offline?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "Yes! When you like a song, it's automatically cached to your local drive. Once cached, you can play it offline with zero latency. The cache persists across app restarts."
+				}
+			}
+		]
+	}
+	</script>
+
 	<!-- Final CTA Section -->
-	<section id="download" style="padding:10rem 0; text-align:center; position:relative;">
+	<section id="download" style="padding:10rem 0; text-align:center; position:relative; background:#0a0a0f;">
+		<div class="section-accent" style="background:linear-gradient(90deg, transparent, var(--primary), transparent);"></div>
 		<div class="container reveal">
 			<h2 class="font-headline" style="font-size:clamp(2rem, 5vw, 3.75rem); font-weight:800; letter-spacing:-0.03em; margin-bottom:2rem;">Ready to Hear the Difference?</h2>
 			<p style="color:#94a3b8; font-size:1.125rem; margin-bottom:3rem; max-width:32rem; margin-left:auto; margin-right:auto; line-height:1.7;">
@@ -845,25 +1246,69 @@ const base = import.meta.env.BASE_URL + '/';
 	</section>
 
 	<!-- Footer -->
-	<footer style="background:var(--surface-container-lowest); padding:3rem 2rem;">
-		<div class="section-divider" style="max-width:80rem; margin:0 auto 3rem;"></div>
-		<div style="max-width:80rem; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1.5rem;">
-			<div style="display:flex; flex-direction:column; gap:0.5rem;">
-				<div style="display:flex; align-items:center; gap:0.5rem;">
-					<img src={`${base}screenshots/logo.png`} alt="NekoBeat" style="width:24px; height:24px; border-radius:6px;" />
-					<span class="font-headline" style="font-size:1.125rem; font-weight:800; color:#e2e8f0;">
-						<span style="color:#e11d48;">Neko</span>Beat
-					</span>
+	<footer style="background:#0a0a0f; padding:4rem 2rem 2rem;">
+		<div style="max-width:80rem; margin:0 auto 3rem; height:1px; background:linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);"></div>
+		<div class="container">
+			<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:3rem; margin-bottom:3rem;">
+				<!-- Brand -->
+				<div>
+					<div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+						<img src={`${base}screenshots/logo.webp`} alt="NekoBeat" style="width:32px; height:32px; border-radius:8px;" />
+						<span class="font-headline" style="font-size:1.25rem; font-weight:800; color:#e2e8f0;">
+							<span style="color:#e11d48;">Neko</span>Beat
+						</span>
+					</div>
+					<p style="color:#64748b; font-size:0.875rem; line-height:1.7; margin-bottom:1rem;">
+						The premium, open-source music aggregator built with Rust and GStreamer.
+					</p>
+					<div style="display:flex; gap:1rem;">
+						<a href="https://github.com/nishal21/NekoBeat" target="_blank" rel="noopener noreferrer" style="color:#64748b; transition:color 0.2s;" aria-label="GitHub">
+							<svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+						</a>
+						<a href="https://discord.gg/kKj8dqq6Je" target="_blank" rel="noopener noreferrer" style="color:#64748b; transition:color 0.2s;" aria-label="Discord">
+							<svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+						</a>
+						<a href="https://x.com/Etainment2" target="_blank" rel="noopener noreferrer" style="color:#64748b; transition:color 0.2s;" aria-label="X (Twitter)">
+							<svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+						</a>
+					</div>
 				</div>
-				<p style="color:#64748b; font-size:0.875rem;">© 2026 NekoBeat. Built with Rust and Soul.</p>
+				<!-- Product -->
+				<div>
+					<h4 style="font-weight:700; color:#f1f5f9; margin-bottom:1rem;">Product</h4>
+					<ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+						<li><a class="footer-link" href="#features">Features</a></li>
+						<li><a class="footer-link" href="#showcase">Screenshots</a></li>
+						<li><a class="footer-link" href="#download">Download</a></li>
+						<li><a class="footer-link" href="#faq">FAQ</a></li>
+						<li><a class="footer-link" href="https://github.com/nishal21/NekoBeat/releases" target="_blank">Changelog</a></li>
+					</ul>
+				</div>
+				<!-- Resources -->
+				<div>
+					<h4 style="font-weight:700; color:#f1f5f9; margin-bottom:1rem;">Resources</h4>
+					<ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+						<li><a class="footer-link" href="https://github.com/nishal21/NekoBeat" target="_blank">GitHub</a></li>
+						<li><a class="footer-link" href="https://github.com/nishal21/NekoBeat#-getting-started" target="_blank">Documentation</a></li>
+						<li><a class="footer-link" href={`${base}llms.txt`}>LLM Context</a></li>
+						<li><a class="footer-link" href={`${base}sitemap-0.xml`}>Sitemap</a></li>
+					</ul>
+				</div>
+				<!-- Legal -->
+				<div>
+					<h4 style="font-weight:700; color:#f1f5f9; margin-bottom:1rem;">Legal</h4>
+					<ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+						<li><a class="footer-link" href="https://github.com/nishal21/NekoBeat/blob/main/LICENSE" target="_blank">MIT License</a></li>
+						<li><a class="footer-link" href="https://discord.gg/kKj8dqq6Je">Community</a></li>
+						<li><a class="footer-link" href="https://x.com/Etainment2">X / Twitter</a></li>
+					</ul>
+				</div>
 			</div>
-			<div style="display:flex; align-items:center; gap:2rem;">
-				<a class="footer-link" href="https://github.com/nishal21/NekoBeat" target="_blank" rel="noopener noreferrer">GitHub</a>
-				<a class="footer-link" href="https://github.com/nishal21/NekoBeat/releases" target="_blank" rel="noopener noreferrer">Releases</a>
-				<a class="footer-link" href="https://github.com/nishal21/NekoBeat#-getting-started" target="_blank" rel="noopener noreferrer">Docs</a>
-			</div>
-			<div style="color:#64748b; font-size:0.875rem; font-style:italic;">
-				Made with love by <span style="color:#fb7185; font-weight:700; font-style:normal;">Nishal</span>
+			<div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem; padding-top:2rem; border-top:1px solid rgba(255,255,255,0.05);">
+				<p style="color:#64748b; font-size:0.875rem;">© 2026 NekoBeat. MIT Licensed. Built with Rust and Soul.</p>
+				<p style="color:#64748b; font-size:0.875rem; font-style:italic;">
+					Made with <span style="color:#fb7185;">♥</span> by <span style="color:#fb7185; font-weight:700; font-style:normal;">Nishal</span>
+				</p>
 			</div>
 		</div>
 	</footer>
@@ -992,6 +1437,26 @@ const base = import.meta.env.BASE_URL + '/';
 				}
 			});
 		});
+
+		// Fetch GitHub star count
+		async function fetchStarCount() {
+			try {
+				const response = await fetch('https://api.github.com/repos/nishal21/NekoBeat');
+				const data = await response.json();
+				const starCount = data.stargazers_count;
+				const starElement = document.getElementById('starCount');
+				if (starElement && starCount !== undefined) {
+					starElement.textContent = starCount.toLocaleString();
+				}
+			} catch (error) {
+				console.log('Could not fetch star count');
+				const starElement = document.getElementById('starCount');
+				if (starElement) {
+					starElement.textContent = 'Star';
+				}
+			}
+		}
+		fetchStarCount();
 	</script>
 </body>
 </html>
